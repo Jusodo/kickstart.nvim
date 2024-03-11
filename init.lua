@@ -543,7 +543,7 @@ require('lazy').setup {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         gopls = {},
         -- pyright = {},
         -- -- rust_analyzer = {},
@@ -790,6 +790,8 @@ require('lazy').setup {
     build = ':TSUpdate',
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+      --
+      -- require('nvim-treesitter.install').compilers = { 'gcc' }
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
@@ -807,6 +809,10 @@ require('lazy').setup {
       --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
+  },
+
+  {
+    'tpope/vim-fugitive',
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
