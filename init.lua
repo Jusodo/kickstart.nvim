@@ -410,6 +410,9 @@ require('lazy').setup {
     end,
   },
 
+  -- connects jdtls with the language server
+  { 'mfussenegger/nvim-jdtls' },
+
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -545,6 +548,7 @@ require('lazy').setup {
       local servers = {
         clangd = {},
         gopls = {},
+        jdtls = {},
         -- pyright = {},
         -- -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -597,6 +601,7 @@ require('lazy').setup {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
+        'terraform-ls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -723,10 +728,38 @@ require('lazy').setup {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'codeium' },
         },
       }
     end,
   },
+
+  -- Install without configuration
+  -- {
+  --   'f4z3r/gruvbox-material.nvim',
+  --   name = 'gruvbox-material',
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  --   config = function()
+  --     require('gruvbox-material').setup {}
+  --
+  --     -- use the light background, default is dark
+  --     -- vim.opt.background = 'light'
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
+
+  -- {
+  --   'projekt0n/github-nvim-theme',
+  --   layz = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require('github-theme').setup {}
+  --
+  --     vim.cmd.colorscheme 'github_light'
+  --   end,
+  -- },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -738,7 +771,8 @@ require('lazy').setup {
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       -- Load the colorscheme here
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight'
+      -- vim.cmd.colorscheme 'tokyonight-day'
 
       -- You can configure highlights by doing something like
       vim.cmd.hi 'Comment gui=none'
@@ -754,7 +788,7 @@ require('lazy').setup {
       -- Better Around/Inside textobjects
       --
       -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
+      --  - va)  - []isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [']quote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
@@ -795,7 +829,7 @@ require('lazy').setup {
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'json', 'go', 'python', 'tsx', 'typescript' },
+        ensure_installed = { 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'json', 'go', 'python', 'tsx', 'typescript', 'java' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
@@ -814,6 +848,37 @@ require('lazy').setup {
   {
     'tpope/vim-fugitive',
   },
+
+  {
+    'Exafunction/codeium.nvim',
+    event = 'BufEnter',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'hrsh7th/nvim-cmp',
+    },
+    config = function()
+      require('codeium').setup {}
+    end,
+  },
+
+  -- noice
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+  },
+
+  -- },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
